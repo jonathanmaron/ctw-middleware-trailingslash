@@ -26,10 +26,9 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 
         $location = $uri->withPath($path)->__toString();
         $factory  = Factory::getResponseFactory();
-        $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY)
-                            ->withHeader(self::HEADER, $location);
+        $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY);
 
-        return $response;
+        return $response->withHeader(self::HEADER, $location);
     }
 
     private function normalize(string $path): string
@@ -39,7 +38,7 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
         }
 
         if (strlen($path) > 1) {
-            if (substr($path, -1) !== '/' && !pathinfo($path, PATHINFO_EXTENSION)) {
+            if ('/' !== substr($path, -1) && !pathinfo($path, PATHINFO_EXTENSION)) {
                 return $path . '/';
             }
         }
