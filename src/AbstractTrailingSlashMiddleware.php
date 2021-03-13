@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Ctw\Middleware\TrailingSlashMiddleware;
 
-use Psr\Http\Server\MiddlewareInterface;
+use Ctw\Middleware\AbstractMiddleware;
 
-abstract class AbstractTrailingSlashMiddleware implements MiddlewareInterface
+abstract class AbstractTrailingSlashMiddleware extends AbstractMiddleware
 {
 }
