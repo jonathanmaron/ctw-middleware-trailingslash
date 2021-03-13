@@ -8,7 +8,6 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "ext-tidy": "*",
         "ctw/ctw-http": "^1.0",
         "ctw/ctw-middleware": "^1.0"
     },
