@@ -24,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CtwTest\\Middleware\\TrailingSlashMiddleware\\": "src"
+            "CtwTest\\Middleware\\TrailingSlashMiddleware\\": "test"
         }
     },
     "scripts": {
