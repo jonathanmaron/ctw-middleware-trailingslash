@@ -12,8 +12,7 @@ class TrailingSlashMiddlewareTest extends AbstractCase
 {
     public function testTrailingSlashMiddleware(): void
     {
-        $serverParams = [];
-        $request      = Factory::createServerRequest('GET', '/path', $serverParams);
+        $request      = Factory::createServerRequest('GET', '/path');
         $stack        = [
             new TrailingSlashMiddleware(),
         ];
