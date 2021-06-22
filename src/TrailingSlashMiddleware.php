@@ -33,14 +33,16 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 
     private function normalize(string $path): string
     {
-        if ('' === $path) {
-            return '/';
+        $slash = '/';
+
+        if (0 === strlen($path)) {
+            return $slash;
         }
 
         if (strlen($path) > 1) {
             $ext = pathinfo($path, PATHINFO_EXTENSION);
-            if ('/' !== substr($path, -1) && 0 === strlen($ext)) {
-                return $path . '/';
+            if ($slash !== substr($path, -1) && 0 === strlen($ext)) {
+                return $path . $slash;
             }
         }
 
