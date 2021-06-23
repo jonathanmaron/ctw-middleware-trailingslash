@@ -40,8 +40,8 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
         }
 
         if (strlen($path) > 1) {
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-            if ($slash !== substr($path, -1) && 0 === strlen($ext)) {
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
+            if ($slash !== substr($path, -1) && 0 === strlen(/** @scrutinizer ignore-type */ $extension)) {
                 return $path . $slash;
             }
         }
