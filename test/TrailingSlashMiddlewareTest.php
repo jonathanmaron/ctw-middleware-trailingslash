@@ -21,7 +21,7 @@ class TrailingSlashMiddlewareTest extends AbstractCase
         $response = Dispatcher::run($stack, $request);
         self::assertEquals(HttpStatus::STATUS_MOVED_PERMANENTLY, $response->getStatusCode());
         $headers = $response->getHeaders();
-        self::assertArrayHasKey('Location', $headers,);
+        self::assertArrayHasKey('Location', $headers);
         self::assertArrayHasKey(0, $headers['Location']);
         self::assertEquals('/path/', $headers['Location'][0]);
     }
@@ -35,7 +35,7 @@ class TrailingSlashMiddlewareTest extends AbstractCase
         $response = Dispatcher::run($stack, $request);
         self::assertEquals(HttpStatus::STATUS_MOVED_PERMANENTLY, $response->getStatusCode());
         $headers = $response->getHeaders();
-        self::assertArrayHasKey('Location', $headers,);
+        self::assertArrayHasKey('Location', $headers);
         self::assertArrayHasKey(0, $headers['Location']);
         self::assertEquals('/', $headers['Location'][0]);
     }
