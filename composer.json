@@ -1,5 +1,5 @@
 {
-    "name": "ctw/ctw-middleware-trailing-slash",
+    "name": "ctw/ctw-middleware-trailingslash",
     "description": "This PSR-15 middleware adds a trailing slash to all URIs, redirecting with an HTTP 301 (\"Moved Permanently\") Location header.",
     "license": "BSD-3-Clause",
     "type": "library",
