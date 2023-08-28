@@ -15,9 +15,7 @@ class TrailingSlashMiddlewareTest extends AbstractCase
     public function testTrailingSlashMiddleware(): void
     {
         $request  = Factory::createServerRequest('GET', '/path');
-        $stack    = [
-            $this->getInstance(),
-        ];
+        $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack, $request);
         self::assertEquals(HttpStatus::STATUS_MOVED_PERMANENTLY, $response->getStatusCode());
         $headers = $response->getHeaders();
@@ -29,9 +27,7 @@ class TrailingSlashMiddlewareTest extends AbstractCase
     public function testTrailingSlashMiddlewareWithNoPath(): void
     {
         $request  = Factory::createServerRequest('GET', '');
-        $stack    = [
-            $this->getInstance(),
-        ];
+        $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack, $request);
         self::assertEquals(HttpStatus::STATUS_MOVED_PERMANENTLY, $response->getStatusCode());
         $headers = $response->getHeaders();
@@ -43,9 +39,7 @@ class TrailingSlashMiddlewareTest extends AbstractCase
     public function testTrailingSlashMiddlewareWithTrailingSlash(): void
     {
         $request  = Factory::createServerRequest('GET', '/path/');
-        $stack    = [
-            $this->getInstance(),
-        ];
+        $stack    = [$this->getInstance()];
         $response = Dispatcher::run($stack, $request);
         self::assertEquals(HttpStatus::STATUS_OK, $response->getStatusCode());
     }

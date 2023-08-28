@@ -11,6 +11,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 {
+    /**
+     * @var string
+     */
     private const HEADER = 'Location';
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -24,7 +27,8 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
             return $response;
         }
 
-        $location = $uri->withPath($path)->__toString();
+        $location = $uri->withPath($path)
+            ->__toString();
         $factory  = Factory::getResponseFactory();
         $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY);
 
@@ -35,13 +39,13 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
     {
         $slash = '/';
 
-        if (0 === strlen($path)) {
+        if ('' === $path) {
             return $slash;
         }
 
-        if (strlen($path) > 1) {
+        if (1 < strlen($path)) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
-            if ($slash !== substr($path, -1) && 0 === strlen(/** @scrutinizer ignore-type */ $extension)) {
+            if ($slash !== substr($path, -1) && '' === $extension) {
                 return $path . $slash;
             }
         }
