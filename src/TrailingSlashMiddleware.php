@@ -27,8 +27,9 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
             return $response;
         }
 
-        $location = $uri->withPath($path)
-            ->__toString();
+        $uri      = $uri->withPath($path);
+        $location = $uri->__toString();
+
         $factory  = Factory::getResponseFactory();
         $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY);
 
