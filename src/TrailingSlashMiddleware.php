@@ -18,18 +18,26 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $config   = $this->getConfig();
+        $uri      = $request->getUri();
         $response = $handler->handle($request);
 
-        $uri  = $request->getUri();
+        if (isset($config['path_disable'])) {
+            foreach ($config['path_disable'] as $path) {
+                if (str_starts_with($uri->getPath(), $path)) {
+                    return $response;
+                }
+            }
+        }
+
         $path = $this->normalize($uri->getPath());
 
         if ($path === $uri->getPath()) {
             return $response;
         }
 
-        $uri      = $uri->withPath($path);
-        $location = $uri->__toString();
-
+        $location = $uri->withPath($path)
+                        ->__toString();
         $factory  = Factory::getResponseFactory();
         $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY);
 
