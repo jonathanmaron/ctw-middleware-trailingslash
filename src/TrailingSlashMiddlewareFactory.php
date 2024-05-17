@@ -13,13 +13,14 @@ class TrailingSlashMiddlewareFactory
         if ($container->has('config')) {
             $config = $container->get('config');
             assert(is_array($config));
-            if(isset($config[TrailingSlashMiddleware::class]))
+            if (isset($config[TrailingSlashMiddleware::class])) {
                 $config = $config[TrailingSlashMiddleware::class];
+            }
         }
 
         $middleware = new TrailingSlashMiddleware();
 
-        if ((is_countable($config) ? count($config) : 0) > 0) {
+        if ([] !== $config) {
             $middleware->setConfig($config);
         }
 
