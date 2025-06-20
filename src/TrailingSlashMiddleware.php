@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Ctw\Middleware\TrailingSlashMiddleware;
 
-use Ctw\Http\HttpStatus;
+use Fig\Http\Message\StatusCodeInterface;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -14,34 +14,37 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
     /**
      * @var string
      */
-    private const HEADER = 'Location';
+    private const string HEADER = 'Location';
 
+    #[\Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $config   = $this->getConfig();
-        $uri      = $request->getUri();
-        $response = $handler->handle($request);
+        $config = $this->getConfig();
+        $uri    = $request->getUri();
 
+        // Check for disabled paths
         if (isset($config['path_disable'])) {
             foreach ($config['path_disable'] as $path) {
                 if (str_starts_with($uri->getPath(), $path)) {
-                    return $response;
+                    return $handler->handle($request);
                 }
             }
         }
 
-        $path = $this->normalize($uri->getPath());
+        // Check if a trailing slash needs to be added BEFORE processing request
+        $normalizedPath = $this->normalize($uri->getPath());
 
-        if ($path === $uri->getPath()) {
-            return $response;
+        if ($normalizedPath !== $uri->getPath()) {
+            // Need to redirect - do it immediately without processing the request
+            $location = $uri->withPath($normalizedPath)->__toString();
+            $factory  = Factory::getResponseFactory();
+            $response = $factory->createResponse(StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
+
+            return $response->withHeader(self::HEADER, $location);
         }
 
-        $location = $uri->withPath($path)
-            ->__toString();
-        $factory  = Factory::getResponseFactory();
-        $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY);
-
-        return $response->withHeader(self::HEADER, $location);
+        // Path is already normalized, continue with the request
+        return $handler->handle($request);
     }
 
     private function normalize(string $path): string
