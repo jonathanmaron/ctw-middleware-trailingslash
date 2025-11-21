@@ -11,9 +11,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 {
-    /**
-     * @var string
-     */
     private const string HEADER = 'Location';
 
     #[\Override]
@@ -23,9 +20,9 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
         $uri    = $request->getUri();
 
         // Check for disabled paths
-        if (isset($config['path_disable'])) {
+        if (isset($config['path_disable']) && is_array($config['path_disable'])) {
             foreach ($config['path_disable'] as $path) {
-                if (str_starts_with($uri->getPath(), $path)) {
+                if (is_string($path) && str_starts_with($uri->getPath(), $path)) {
                     return $handler->handle($request);
                 }
             }
@@ -36,7 +33,8 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 
         if ($normalizedPath !== $uri->getPath()) {
             // Need to redirect - do it immediately without processing the request
-            $location = $uri->withPath($normalizedPath)->__toString();
+            $location = $uri->withPath($normalizedPath)
+                ->__toString();
             $factory  = Factory::getResponseFactory();
             $response = $factory->createResponse(StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
 

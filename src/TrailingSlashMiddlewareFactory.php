@@ -15,6 +15,7 @@ class TrailingSlashMiddlewareFactory
             assert(is_array($config));
             if (isset($config[TrailingSlashMiddleware::class])) {
                 $config = $config[TrailingSlashMiddleware::class];
+                assert(is_array($config));
             }
         }
 
