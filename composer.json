@@ -45,8 +45,7 @@
         "qa-fix": [
             "@rector-fix",
             "@ecs-fix",
-            "@phpstan",
-            "@test"
+            "@phpstan"
         ],
         "rector": "php vendor/bin/rector process --clear-cache --dry-run",
         "rector-fix": "php vendor/bin/rector process --clear-cache",
