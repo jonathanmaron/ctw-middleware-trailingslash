@@ -28,6 +28,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
 
         $actual = ($this->trailingSlashMiddlewareFactory)($container);
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(TrailingSlashMiddleware::class, $actual);
     }
 
@@ -44,6 +45,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(TrailingSlashMiddleware::class, $middleware);
         self::assertEmpty($middleware->getConfig());
     }
@@ -63,6 +65,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(TrailingSlashMiddleware::class, $middleware);
         self::assertEmpty($middleware->getConfig());
     }
@@ -88,6 +91,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(TrailingSlashMiddleware::class, $middleware);
         // The factory sets the full container config, not the middleware-specific one
         self::assertSame($containerConfig, $middleware->getConfig());
@@ -115,6 +119,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(TrailingSlashMiddleware::class, $middleware);
         self::assertSame($middlewareConfig, $middleware->getConfig());
     }
@@ -231,6 +236,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(TrailingSlashMiddleware::class, $middleware);
         self::assertEmpty($middleware->getConfig());
     }
