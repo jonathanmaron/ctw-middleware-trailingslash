@@ -22,7 +22,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
      */
     public function testInvokeCreatesTrailingSlashMiddlewareInstance(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(false);
 
@@ -55,12 +55,10 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
      */
     public function testInvokeCreatesMiddlewareWithEmptyConfigWhenContainerConfigIsEmpty(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->method('get')
-            ->with('config')
             ->willReturn([]);
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
@@ -81,12 +79,10 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             ],
         ];
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->method('get')
-            ->with('config')
             ->willReturn($containerConfig);
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
@@ -109,12 +105,10 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             TrailingSlashMiddleware::class => $middlewareConfig,
         ];
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->method('get')
-            ->with('config')
             ->willReturn($containerConfig);
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
@@ -143,12 +137,10 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             TrailingSlashMiddleware::class => $middlewareConfig,
         ];
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->method('get')
-            ->with('config')
             ->willReturn($containerConfig);
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);
@@ -177,7 +169,6 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->expects(self::once())
             ->method('get')
@@ -194,7 +185,6 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     {
         $container = $this->createMock(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(false);
         $container->expects(self::never())
             ->method('get');
@@ -207,7 +197,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
      */
     public function testInvokeCreatesUniqueInstancesOnMultipleInvocations(): void
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(false);
 
@@ -226,12 +216,10 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             TrailingSlashMiddleware::class => [],
         ];
 
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->method('get')
-            ->with('config')
             ->willReturn($containerConfig);
 
         $middleware = ($this->trailingSlashMiddlewareFactory)($container);

@@ -412,12 +412,10 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
 
     private function getInstanceWithConfig(array $config): TrailingSlashMiddleware
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
         $container->method('has')
-            ->with('config')
             ->willReturn(true);
         $container->method('get')
-            ->with('config')
             ->willReturn($config);
 
         $factory = new TrailingSlashMiddlewareFactory();
