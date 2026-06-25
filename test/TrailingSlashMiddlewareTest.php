@@ -412,7 +412,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
 
     private function getInstanceWithConfig(array $config): TrailingSlashMiddleware
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(true);
         $container->method('get')

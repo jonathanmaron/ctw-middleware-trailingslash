@@ -1,122 +1,58 @@
-# PHP 8.5.7 Upgrade — `ctw/ctw-middleware-trailingslash`
+# PHP 8.5 Migration — `ctw/ctw-middleware-trailingslash`
 
 - **Branch:** `php85` (cut from `master`)
 - **Runtime:** PHP 8.3.31 → **8.5.7**
-- **Date:** 2026-06-25
+- **PHPUnit:** 12 → **13.2.1**
+- **Status:** ✅ done
 
-This is a **TODO list** of the changes required for this package to run cleanly
-under PHP 8.5.7. Nothing here has been fixed yet — the fixes happen in a second
-step. Boxes are intentionally left unchecked.
-
----
-
-## ✅ Applied on `php85` (diactoros blocker resolved)
-
-> This banner supersedes the "❌ FAILS" analysis below, which captured the
-> pre-fix state.
-
-`composer update -W` is now **green**. Change to `composer.json`:
-
-- `ctw/ctw-middleware` `^4.0` → **`dev-php85`**
-
-That transitively installs the base package's PHP 8.5 fixes:
-`laminas/laminas-diactoros 3.8.0`, `middlewares/utils 4.0.2`,
-`laminas/laminas-servicemanager 4.5.1`. The five `middlewares/utils`
-"implicitly nullable parameter" deprecations listed in §2 are **cleared**
-(v4 declares explicit `?type` parameters).
-
-**Residual (separate from the diactoros blocker):**
-- The shared PHPStan `missingType.*` unmatched-ignore (§3) — owned by
-  `ctw/ctw-qa`, fix centrally there.
-- New "mock object without expectations" **PHPUnit notices**, surfaced by the
-  PHPUnit 12.4→12.5 upgrade (test-modernization; use `createStub()` or the
-  `#[AllowMockObjectsWithoutExpectations]` attribute). Not a PHP 8.5 issue.
-
-**Before merge:** re-tag `ctw/ctw-middleware` to a stable release and replace the
-`dev-php85` pin.
-
-Detection commands used:
-
-```bash
-composer update -W
-php vendor/bin/phpunit --no-coverage --display-deprecations --display-warnings --display-notices --display-errors
-composer rector      # rector --dry-run
-composer phpstan
-```
+PSR-15 middleware that appends a trailing slash and redirects with an HTTP 301.
+It depends on **`ctw/ctw-http ^4.0`** and **`ctw/ctw-middleware`**. Under PHP 8.5
+the original `composer update -W` failed because `ctw/ctw-middleware ^4.0` pins
+`laminas/laminas-diactoros` 2.x (caps PHP at `~8.3.0`); the fix is
+`ctw/ctw-middleware: dev-php85` (diactoros → ^3, middlewares/utils → ^4, which
+clears five vendor "implicitly nullable parameter" deprecations). Beyond the
+shared bump the **first-party** work here is a test-double cleanup required by
+PHPUnit 13.
 
 ---
 
-## 1. `composer update -W` — ❌ FAILS (inherited blocker)
+## Audit checklist
 
-```
-Problem 1
-  - Root composer.json requires ctw/ctw-middleware ^4.0
-  - ctw/ctw-middleware[4.0.0 ... 4.0.6] require laminas/laminas-diactoros ^2.11
-  - laminas/laminas-diactoros[2.11 ... 2.26] require php ~8.0 || ~8.1 || ~8.2 || ~8.3
-    -> your php version (8.5.7) does not satisfy that requirement.
-```
+### `test/` — first-party (PHPUnit 13 test doubles)
 
-This package requires `ctw/ctw-http ^4.0` (unblocked on its own) **and**
-`ctw/ctw-middleware ^4.0`. The latter is the blocker: its 4.0.x releases pin
-Diactoros 2.x (PHP ≤ 8.3). No direct `laminas-diactoros` dependency here.
+- [x] **(tooling) `test/TrailingSlashMiddlewareFactoryTest.php`, `test/TrailingSlashMiddlewareTest.php`** — PHPUnit 13 emits "mock object without expectations" notices for `createMock()` doubles that only stub return values. The factory test and the `getInstanceWithConfig()` helper used `createMock()` purely as stubs.
+  **Fix:** migrated those stub-style doubles to `createStub()` and dropped the now-redundant `->with('config')` argument-match constraints (the stubbed `has()` / `get()` returns are fixed regardless of argument). `createMock()` was kept where `->expects()` is genuinely used (the two `testInvokeOnlyCallsContainerGetWhenConfigExists` / `…NeverCalled` cases). This reduced the assertion count from 109 to 85 — the dropped `with()` constraints were the removed assertions — but all 53 tests still pass and verify behavior.
+- [x] **(tooling) `test/TrailingSlashMiddlewareFactoryTest.php` (×7), `test/TrailingSlashMiddlewareTest.php` (×1)** — PHPStan `staticMethod.dynamicCall`: `createStub()` is a static method on `TestCase`, so calling it as `$this->createStub(...)` is a dynamic call to a static method.
+  **Fix:** changed the eight new `$this->createStub(ContainerInterface::class)` calls to `self::createStub(ContainerInterface::class)`. PHPStan is now clean.
 
-- [ ] **Blocked on `ctw/ctw-middleware`.** Fix & publish the Diactoros 3 bump
-  there first (`ctw-middleware/dev-php85/UPDATE.md` §1), then bump this package's
-  `ctw/ctw-middleware` (and `ctw/ctw-http`) constraints and re-run
-  `composer update -W`.
+### Vendor (cleared by `ctw/ctw-middleware: dev-php85`)
 
-> §2 was captured against the existing (master) lockfile because the update
-> aborts.
+- [x] **(deprecation) `vendor/middlewares/utils`** — five "implicitly nullable parameter" deprecations (`Factory::createUploadedFile()` `$size`/`$filename`/`$mediaType`; `Dispatcher::run()` `$request`; `CallableHandler::__construct()` `$responseFactory`).
+  **Fix:** not fixable in this repo's `src/`. Cleared by `middlewares/utils` v4 (4.0.2), pulled in via `ctw/ctw-middleware: dev-php85` (which also installs diactoros 3.8.0 and servicemanager 4.5.1).
+
+### Tooling
+
+- [x] **(tooling) PHPUnit 12 → 13.** Suite runs green on PHPUnit 13.2.1.
+  **Fix:** `phpunit/phpunit ^12 → ^13`, `ctw/ctw-qa → dev-php85`, `phpunit.xml.dist` schema → 13.2.
+- [x] **(tooling) PHPStan `missingType.*` unmatched-ignore.** Resolved centrally in `ctw/ctw-qa` (`reportUnmatchedIgnoredErrors: false`) via `ctw/ctw-qa: dev-php85`.
 
 ---
 
-## 2. PHP 8.5 runtime deprecations
+## composer.json & CI
 
-All originate in the **third-party** `middlewares/utils` dependency — the
-"implicitly nullable parameter" deprecation. **No first-party `src/` change is
-required.**
-
-| Location | Method / parameter |
-| --- | --- |
-| `vendor/middlewares/utils/src/Factory.php:88` | `Factory::createUploadedFile()` `$size` |
-| `vendor/middlewares/utils/src/Factory.php:90` | `Factory::createUploadedFile()` `$filename` |
-| `vendor/middlewares/utils/src/Factory.php:91` | `Factory::createUploadedFile()` `$mediaType` |
-| `vendor/middlewares/utils/src/Dispatcher.php:21` | `Dispatcher::run()` `$request` |
-| `vendor/middlewares/utils/src/CallableHandler.php:25` | `CallableHandler::__construct()` `$responseFactory` |
-
-- [ ] Resolved by updating `middlewares/utils` once §1 is cleared; escalate
-  upstream if the latest release still emits them.
-
-> `ctw/ctw-http` also currently ships the implicitly-nullable `$previous`
-> deprecation (see `ctw-http/dev-php85/UPDATE.md` §2); once `ctw/ctw-http` is
-> fixed and re-published it clears here automatically. It was not triggered by
-> this package's test paths but will appear if exception construction is
-> exercised.
+- [x] `require.php`: `^8.3` → **`^8.5`**.
+- [x] `ctw/ctw-http`: **`^4.0`** (4.0.6) — unblocked on its own; left at `^4.0`.
+- [x] `ctw/ctw-middleware`: `^4.0` → **`dev-php85`** — brings diactoros ^3 (3.8.0) + middlewares/utils ^4 (4.0.2); unblocks `composer update -W`. Re-tag to a stable release before merge.
+- [x] `ctw/ctw-qa`: `^5.0` → **`dev-php85`**. Re-tag before merge.
+- [x] `phpunit/phpunit`: `^12.0` → **`^13.0`** (installs 13.2.1).
+- [x] `phpunit.xml.dist`: schema → 13.2.
+- [x] `.github/workflows/tests.yml`: matrix → **PHP 8.5 only** (`php: [ '8.5' ]`).
 
 ---
 
-## 3. QA tooling issues
+## Final audit (PHP 8.5.7)
 
-- [ ] **PHPStan unmatched ignore pattern** (`missingType.generics`) — fix
-  centrally in **`ctw/ctw-qa`** (`ctw-qa/dev-php85/UPDATE.md` §3). PHPStan
-  currently reports **1 error**, this spurious one only.
-
----
-
-## 4. Notes (non-blocking)
-
-- Run locally with `--no-coverage` (no Xdebug/PCOV here). Not a PHP 8.5 issue.
-
----
-
-## 5. Verification snapshot (current state on `php85`)
-
-| Check | Result |
-| --- | --- |
-| `composer update -W` | ❌ fails — transitive `laminas-diactoros` 2.x (§1) |
-| PHPUnit (`--no-coverage`, stale deps) | 53 tests, 109 assertions, **5 deprecations** (`middlewares/utils`, §2) |
-| Rector (dry-run) | ✅ no changes proposed |
-| PHPStan | ❌ 1 error (shared unmatched-ignore, §3) |
-
-No first-party PHP 8.5 source issues; gated on upstream `ctw/ctw-middleware`,
-`ctw/ctw-http` + `ctw/ctw-qa` fixes.
+- [x] `php -v` → **PHP 8.5.7** (cli).
+- [x] `composer update -W` → **clean** (rc=0, nothing to modify; no security advisories).
+- [x] `phpunit --no-coverage --display-deprecations --display-warnings --display-notices --display-errors` → **53 tests, 85 assertions, 0 issues** (PHPUnit 13.2.1 / PHP 8.5.7).
+- [x] PHPStan → **clean** (no issues found) after the `self::createStub` fix above.

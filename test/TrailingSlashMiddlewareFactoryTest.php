@@ -22,7 +22,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
      */
     public function testInvokeCreatesTrailingSlashMiddlewareInstance(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(false);
 
@@ -55,7 +55,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
      */
     public function testInvokeCreatesMiddlewareWithEmptyConfigWhenContainerConfigIsEmpty(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(true);
         $container->method('get')
@@ -79,7 +79,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             ],
         ];
 
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(true);
         $container->method('get')
@@ -105,7 +105,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             TrailingSlashMiddleware::class => $middlewareConfig,
         ];
 
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(true);
         $container->method('get')
@@ -137,7 +137,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             TrailingSlashMiddleware::class => $middlewareConfig,
         ];
 
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(true);
         $container->method('get')
@@ -197,7 +197,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
      */
     public function testInvokeCreatesUniqueInstancesOnMultipleInvocations(): void
     {
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(false);
 
@@ -216,7 +216,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
             TrailingSlashMiddleware::class => [],
         ];
 
-        $container = $this->createStub(ContainerInterface::class);
+        $container = self::createStub(ContainerInterface::class);
         $container->method('has')
             ->willReturn(true);
         $container->method('get')
