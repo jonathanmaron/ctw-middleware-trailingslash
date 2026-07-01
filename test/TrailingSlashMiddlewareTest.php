@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 final class TrailingSlashMiddlewareTest extends AbstractCase
 {
     /**
-     * Test that path without trailing slash redirects with 301
+     * Test that process returns a 301 redirect to the slashed path when the request path has no trailing slash.
      */
     public function testProcessRedirectsPathWithoutTrailingSlash(): void
     {
@@ -31,7 +31,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that empty path redirects to root with trailing slash
+     * Test that process returns a 301 redirect to root when the request path is an empty string.
      */
     public function testProcessRedirectsEmptyPathToRoot(): void
     {
@@ -48,7 +48,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with trailing slash passes through without redirect
+     * Test that process delegates to the handler without redirecting when the request path already ends in a slash.
      */
     public function testProcessPassesThroughPathWithTrailingSlash(): void
     {
@@ -60,7 +60,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that root path passes through without redirect
+     * Test that process delegates to the handler without redirecting when the request path is the root slash.
      */
     public function testProcessPassesThroughRootPath(): void
     {
@@ -72,7 +72,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with file extension does not get trailing slash
+     * Test that process delegates to the handler without redirecting when the request path has a file extension.
      */
     public function testProcessDoesNotAddTrailingSlashToPathWithFileExtension(): void
     {
@@ -84,7 +84,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with PHP extension does not get trailing slash
+     * Test that process delegates to the handler without redirecting when the request path is a .php file.
      */
     public function testProcessDoesNotAddTrailingSlashToPhpFile(): void
     {
@@ -96,7 +96,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with HTML extension does not get trailing slash
+     * Test that process delegates to the handler without redirecting when the request path is a .html file.
      */
     public function testProcessDoesNotAddTrailingSlashToHtmlFile(): void
     {
@@ -108,7 +108,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with JSON extension does not get trailing slash
+     * Test that process delegates to the handler without redirecting when a nested request path is a .json file.
      */
     public function testProcessDoesNotAddTrailingSlashToJsonFile(): void
     {
@@ -120,7 +120,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that deep nested path without trailing slash redirects
+     * Test that process returns a 301 redirect to the slashed path when a deeply nested path lacks a trailing slash.
      */
     public function testProcessRedirectsDeepNestedPath(): void
     {
@@ -135,7 +135,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with query string preserves query string in redirect
+     * Test that process preserves the query string in the Location header when redirecting an unslashed path.
      */
     public function testProcessPreservesQueryStringInRedirect(): void
     {
@@ -150,7 +150,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with fragment preserves fragment in redirect
+     * Test that process preserves the fragment in the Location header when redirecting an unslashed path.
      */
     public function testProcessPreservesFragmentInRedirect(): void
     {
@@ -165,7 +165,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with query string and fragment preserves both in redirect
+     * Test that process preserves both query string and fragment in the Location header when redirecting.
      */
     public function testProcessPreservesQueryStringAndFragmentInRedirect(): void
     {
@@ -180,7 +180,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that disabled paths are not redirected
+     * Test that process delegates to the handler without redirecting when the path matches the first disabled prefix.
      */
     public function testProcessSkipsDisabledPaths(): void
     {
@@ -198,7 +198,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that second disabled path is skipped
+     * Test that process delegates to the handler without redirecting when the path matches a later disabled prefix.
      */
     public function testProcessSkipsSecondDisabledPath(): void
     {
@@ -216,7 +216,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that paths not in disabled list are still redirected
+     * Test that process still returns a 301 redirect when the path matches none of the disabled prefixes.
      */
     public function testProcessRedirectsPathsNotInDisabledList(): void
     {
@@ -237,7 +237,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that exact match of disabled path is skipped
+     * Test that process delegates to the handler without redirecting when the path exactly equals a disabled prefix.
      */
     public function testProcessSkipsExactMatchOfDisabledPath(): void
     {
@@ -255,7 +255,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path starting with disabled prefix is skipped
+     * Test that process delegates to the handler without redirecting when the path starts with a multi-segment disabled prefix.
      */
     public function testProcessSkipsPathStartingWithDisabledPrefix(): void
     {
@@ -273,7 +273,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that similar but non-matching path is not skipped
+     * Test that process still returns a 301 redirect when the path merely resembles but does not start with a disabled prefix.
      */
     public function testProcessDoesNotSkipSimilarButNonMatchingPath(): void
     {
@@ -291,7 +291,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with special characters redirects correctly
+     * Test that process returns a 301 redirect preserving dashes and underscores when the unslashed path contains them.
      */
     public function testProcessRedirectsPathWithSpecialCharacters(): void
     {
@@ -306,7 +306,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with encoded characters redirects correctly
+     * Test that process returns a 301 redirect preserving percent-encoding when the unslashed path is URL-encoded.
      */
     public function testProcessRedirectsPathWithEncodedCharacters(): void
     {
@@ -321,7 +321,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with multiple query parameters preserves all parameters
+     * Test that process preserves every query parameter in the Location header when redirecting a multi-parameter path.
      */
     public function testProcessPreservesMultipleQueryParameters(): void
     {
@@ -336,7 +336,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that single character path redirects correctly
+     * Test that process returns a 301 redirect to the slashed path when the request path is a single character segment.
      */
     public function testProcessRedirectsSingleCharacterPath(): void
     {
@@ -351,7 +351,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path with dots is treated as file with extension
+     * Test that process delegates to the handler without redirecting when a dotted path is read as having an extension.
      */
     public function testProcessDoesNotAddTrailingSlashToPathWithDots(): void
     {
@@ -364,7 +364,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that middleware works with different HTTP methods
+     * Test that process returns a 301 redirect to the slashed path when an unslashed path is requested via POST.
      */
     public function testProcessWorksWithPostMethod(): void
     {
@@ -379,7 +379,7 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that file with multiple dots preserves extension check
+     * Test that process delegates to the handler without redirecting when the path is a file with multiple dots.
      */
     public function testProcessDoesNotAddTrailingSlashToFileWithMultipleDots(): void
     {
@@ -391,12 +391,51 @@ final class TrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that path ending with trailing slash and having extension passes through
+     * Test that process delegates to the handler without redirecting when the path has an extension and already ends in a slash.
      */
     public function testProcessPassesThroughPathWithExtensionAndTrailingSlash(): void
     {
         $request = Factory::createServerRequest('GET', '/file.txt/');
         $stack = [$this->getInstance()];
+        $response = Dispatcher::run($stack, $request);
+
+        self::assertSame(HttpStatus::STATUS_OK, $response->getStatusCode());
+    }
+
+    /**
+     * Test that process ignores the disable list and returns a 301 redirect when path_disable is not an array.
+     */
+    public function testProcessRedirectsWhenPathDisableIsNotAnArray(): void
+    {
+        $config = [
+            TrailingSlashMiddleware::class => [
+                'path_disable' => '/admin',
+            ],
+        ];
+
+        $request = Factory::createServerRequest('GET', '/admin/users');
+        $stack = [$this->getInstanceWithConfig($config)];
+        $response = Dispatcher::run($stack, $request);
+
+        self::assertSame(HttpStatus::STATUS_MOVED_PERMANENTLY, $response->getStatusCode());
+
+        $headers = $response->getHeaders();
+        self::assertSame('/admin/users/', $headers['Location'][0]);
+    }
+
+    /**
+     * Test that process skips non-string disable entries and still matches a later string prefix in the disable list.
+     */
+    public function testProcessSkipsNonStringEntriesInDisableList(): void
+    {
+        $config = [
+            TrailingSlashMiddleware::class => [
+                'path_disable' => [123, '/admin'],
+            ],
+        ];
+
+        $request = Factory::createServerRequest('GET', '/admin/users');
+        $stack = [$this->getInstanceWithConfig($config)];
         $response = Dispatcher::run($stack, $request);
 
         self::assertSame(HttpStatus::STATUS_OK, $response->getStatusCode());

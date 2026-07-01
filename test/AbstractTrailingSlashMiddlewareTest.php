@@ -26,7 +26,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that config is empty by default
+     * Test that getConfig returns an empty array when no configuration has been set.
      */
     public function testGetConfigReturnsEmptyArrayByDefault(): void
     {
@@ -36,7 +36,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that setConfig stores configuration correctly
+     * Test that getConfig returns the stored array when setConfig has been called with a populated configuration.
      */
     public function testSetConfigStoresConfigurationCorrectly(): void
     {
@@ -51,7 +51,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that setConfig returns self for method chaining
+     * Test that setConfig returns the same middleware instance when called, enabling method chaining.
      */
     public function testSetConfigReturnsInstanceForMethodChaining(): void
     {
@@ -65,7 +65,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that setConfig can be chained
+     * Test that setConfig applies the final configuration when invoked twice in a fluent chain.
      */
     public function testSetConfigCanBeChained(): void
     {
@@ -84,7 +84,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that setConfig overwrites previous configuration
+     * Test that setConfig replaces the prior configuration when called a second time.
      */
     public function testSetConfigOverwritesPreviousConfiguration(): void
     {
@@ -105,7 +105,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that empty array can be set as config
+     * Test that setConfig resets the configuration when called with an empty array after a populated one.
      */
     public function testSetConfigWithEmptyArray(): void
     {
@@ -120,7 +120,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that complex nested arrays are stored correctly
+     * Test that setConfig preserves the structure when given a complex nested configuration array.
      */
     public function testSetConfigWithComplexNestedArrays(): void
     {
@@ -140,7 +140,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that numeric array keys are preserved
+     * Test that setConfig preserves the keys when the configuration array uses numeric keys.
      */
     public function testSetConfigPreservesNumericArrayKeys(): void
     {
@@ -157,7 +157,7 @@ final class AbstractTrailingSlashMiddlewareTest extends AbstractCase
     }
 
     /**
-     * Test that string keys are preserved
+     * Test that setConfig preserves the keys when the configuration array uses string keys.
      */
     public function testSetConfigPreservesStringKeys(): void
     {

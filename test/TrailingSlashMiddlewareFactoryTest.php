@@ -18,7 +18,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates TrailingSlashMiddleware instance
+     * Test that __invoke returns a TrailingSlashMiddleware instance when the container has no config service.
      */
     public function testInvokeCreatesTrailingSlashMiddlewareInstance(): void
     {
@@ -33,7 +33,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates middleware without config when container has no config
+     * Test that __invoke leaves the middleware config empty when the container reports no config service.
      */
     public function testInvokeCreatesMiddlewareWithoutConfigWhenContainerHasNoConfig(): void
     {
@@ -51,7 +51,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates middleware with empty config when container config is empty
+     * Test that __invoke leaves the middleware config empty when the container config service is an empty array.
      */
     public function testInvokeCreatesMiddlewareWithEmptyConfigWhenContainerConfigIsEmpty(): void
     {
@@ -69,7 +69,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates middleware without applying config when no middleware-specific config exists
+     * Test that __invoke applies the full container config when it contains no middleware-specific entry.
      */
     public function testInvokeCreatesMiddlewareWithoutApplyingConfigWhenNoMiddlewareSpecificConfig(): void
     {
@@ -94,7 +94,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory applies middleware-specific configuration when present
+     * Test that __invoke applies the middleware-specific configuration when the container config nests it by class name.
      */
     public function testInvokeAppliesMiddlewareSpecificConfiguration(): void
     {
@@ -119,7 +119,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory applies nested middleware configuration correctly
+     * Test that __invoke extracts only the nested middleware entry when the container config also holds other keys.
      */
     public function testInvokeAppliesNestedMiddlewareConfiguration(): void
     {
@@ -149,7 +149,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory only calls container has once
+     * Test that __invoke queries the container for the config service exactly once when building the middleware.
      */
     public function testInvokeCallsContainerHasOnce(): void
     {
@@ -163,7 +163,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory calls container get when config exists
+     * Test that __invoke retrieves the config service exactly once when the container reports it exists.
      */
     public function testInvokeCallsContainerGetWhenConfigExists(): void
     {
@@ -179,7 +179,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory does not call container get when config does not exist
+     * Test that __invoke never retrieves the config service when the container reports it is absent.
      */
     public function testInvokeDoesNotCallContainerGetWhenConfigDoesNotExist(): void
     {
@@ -193,7 +193,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory creates unique instances on multiple invocations
+     * Test that __invoke returns a distinct middleware instance each time it is called with the same container.
      */
     public function testInvokeCreatesUniqueInstancesOnMultipleInvocations(): void
     {
@@ -208,7 +208,7 @@ final class TrailingSlashMiddlewareFactoryTest extends AbstractCase
     }
 
     /**
-     * Test that factory handles config with empty middleware-specific array
+     * Test that __invoke leaves the middleware config empty when the middleware-specific entry is an empty array.
      */
     public function testInvokeHandlesConfigWithEmptyMiddlewareSpecificArray(): void
     {

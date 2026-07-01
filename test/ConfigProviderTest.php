@@ -18,7 +18,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that invoke returns complete configuration array
+     * Test that __invoke returns the complete dependencies configuration when the provider is called.
      */
     public function testInvokeReturnsCompleteConfiguration(): void
     {
@@ -36,7 +36,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that invoke returns array with dependencies key
+     * Test that __invoke returns an array containing an array-typed dependencies key when the provider is called.
      */
     public function testInvokeReturnsArrayWithDependenciesKey(): void
     {
@@ -47,7 +47,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that dependencies contain factories configuration
+     * Test that getDependencies returns the factories mapping when the provider exposes its dependencies.
      */
     public function testGetDependenciesReturnsFactoriesConfiguration(): void
     {
@@ -63,7 +63,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that dependencies contain factories key
+     * Test that getDependencies returns an array containing an array-typed factories key.
      */
     public function testGetDependenciesContainsFactoriesKey(): void
     {
@@ -74,7 +74,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that factory mapping is correct for TrailingSlashMiddleware
+     * Test that getDependencies maps TrailingSlashMiddleware to its factory when resolving the factories entry.
      */
     public function testFactoryMappingIsCorrect(): void
     {
@@ -89,7 +89,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that invoke and getDependencies return consistent results
+     * Test that __invoke nests the getDependencies result under its dependencies key when both are compared.
      */
     public function testInvokeAndGetDependenciesAreConsistent(): void
     {
@@ -100,7 +100,7 @@ final class ConfigProviderTest extends AbstractCase
     }
 
     /**
-     * Test that multiple invocations return identical results
+     * Test that __invoke returns identical configuration when the provider is called more than once.
      */
     public function testMultipleInvocationsReturnIdenticalResults(): void
     {
