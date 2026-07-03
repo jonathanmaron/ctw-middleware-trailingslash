@@ -18,20 +18,21 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
     {
         $config = $this->getConfig();
         $uri    = $request->getUri();
+        $path   = $uri->getPath();
 
-        // Check for disabled paths
-        if (isset($config['path_disable']) && is_array($config['path_disable'])) {
-            foreach ($config['path_disable'] as $path) {
-                if (is_string($path) && str_starts_with($uri->getPath(), $path)) {
-                    return $handler->handle($request);
-                }
-            }
+        // Check for disabled paths: skip normalization when any configured prefix matches.
+        $pathDisable = $config['path_disable'] ?? null;
+        if (is_array($pathDisable) && array_any(
+            $pathDisable,
+            static fn (mixed $prefix): bool => is_string($prefix) && str_starts_with($path, $prefix),
+        )) {
+            return $handler->handle($request);
         }
 
         // Check if a trailing slash needs to be added BEFORE processing request
-        $normalizedPath = $this->normalize($uri->getPath());
+        $normalizedPath = $this->normalize($path);
 
-        if ($normalizedPath !== $uri->getPath()) {
+        if ($normalizedPath !== $path) {
             // Need to redirect - do it immediately without processing the request
             $location = $uri->withPath($normalizedPath)
                 ->__toString();
@@ -55,7 +56,7 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
 
         if (1 < strlen($path)) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
-            if ($slash !== substr($path, -1) && '' === $extension) {
+            if (!str_ends_with($path, $slash) && '' === $extension) {
                 return $path . $slash;
             }
         }
