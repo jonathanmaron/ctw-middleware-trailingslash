@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Ctw\Middleware\TrailingSlashMiddleware;
 
-use Fig\Http\Message\StatusCodeInterface;
+use Ctw\Http\HttpStatus;
 use Middlewares\Utils\Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -37,7 +37,7 @@ class TrailingSlashMiddleware extends AbstractTrailingSlashMiddleware
             $location = $uri->withPath($normalizedPath)
                 ->__toString();
             $factory  = Factory::getResponseFactory();
-            $response = $factory->createResponse(StatusCodeInterface::STATUS_MOVED_PERMANENTLY);
+            $response = $factory->createResponse(HttpStatus::STATUS_MOVED_PERMANENTLY);
 
             return $response->withHeader(self::HEADER, $location);
         }
